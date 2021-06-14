@@ -10,7 +10,7 @@ const dbConfig = require("./db.config.js");
 // });
 
 var connection = mysql.createConnection({
-    host     : process.env.OPENSHIFT_MYSQL_DB_HOST,
+    host     : "172.30.167.49",
     port     : process.env.OPENSHIFT_MYSQL_DB_PORT,
     user     : 'db_user',
     password : 'Anka@1234',
