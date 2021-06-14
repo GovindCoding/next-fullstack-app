@@ -14,19 +14,19 @@ export default (req, res) => {
             console.info(SERVICE_FILE_NAME + SERVICE_NAME + "Entering into login().");
             User.login(new User(reqObj), async (err, user) => {
                 if (err) {
-                    console.error(SERVICE_FILE_NAME + SERVICE_NAME + "Some error occurred while login user! Error:" + err);
-                    return APIResponse.errorResponse(res, "Some error occurred while creating the User!", "LGNE001");
+                    console.error(SERVICE_FILE_NAME + SERVICE_NAME + "Error while login user. Error:" + err);
+                    return APIResponse.errorResponseWithError(res, "Error while login user. ", "LGNE001", err);
                 } else {
                     delete user.password;
                     user.accessToken = await jwtSign({ username: user.email, userId: user.id, phone: user.phone });
-                    console.info(SERVICE_FILE_NAME + SERVICE_NAME + "User login successfully!");
-                    return APIResponse.successResponseWithData(res, "User login successfully!", user, "LGNS001");
+                    console.info(SERVICE_FILE_NAME + SERVICE_NAME + "User login successfully.");
+                    return APIResponse.successResponseWithData(res, "User login successfully.", user, "LGNS001");
                 }
             });
         } catch (error) {
             console.log(error);
-            console.error(SERVICE_FILE_NAME + SERVICE_NAME + "Something went wrong! Error:" + error);
-            return APIResponse.errorResponse(res, "Something went wrong.", "LGNE002");
+            console.error(SERVICE_FILE_NAME + SERVICE_NAME + "Something went wrong while login. Error:" + error);
+            return APIResponse.errorResponseWithError(res, "Something went wrong while login.", "LGNE002", error);
         }
     }
 }

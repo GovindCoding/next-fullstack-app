@@ -32,8 +32,8 @@ export default (req, res) => {
             });
         } catch (error) {
             console.error(error);
-            console.error(SERVICE_FILE_NAME + SERVICE_NAME + "Something went wrong..");
-            return APIResponse.errorResponse(res, "Something went wrong.", "USRE001");
+            console.error(SERVICE_FILE_NAME + SERVICE_NAME + "Something went wrong.");
+            return APIResponse.errorResponseWithError(res, "Something went wrong.", "USRE001", error);
         }
     } else if(req.method === "GET"){
         const SERVICE_NAME = "GetUser() :: ";
@@ -42,18 +42,18 @@ export default (req, res) => {
             User.getUserById(req.params.id, (err, data) => {
                 if (err) {
                     console.error(SERVICE_FILE_NAME + SERVICE_NAME + "Some error occurred while get the User! Error:" + err);
-                    return APIResponse.errorResponse(res, "Some error occurred while getting the User!", "USRE002");
+                    return APIResponse.errorResponseWithError(res, "Some error occurred while getting the User!", "USRE002", error);
                 } else {
                     delete data.otp;
                     delete data.password;
                     console.info(SERVICE_FILE_NAME + SERVICE_NAME + "User getting successfully!");
-                    return APIResponse.successResponseWithData(res, "User getting successfully!", data, "USRS001");
+                    return APIResponse.successResponseWithData(res, "User getting successfully!", data, "USRS002");
                 }
             });
         } catch (error) {
             console.error(error);
             console.error(SERVICE_FILE_NAME + SERVICE_NAME + "Something went wrong.");
-            return APIResponse.errorResponse(res, "Something went wrong.", "USRE002");
+            return APIResponse.errorResponseWithError(res, "Something went wrong.", "USRE003", error);
         }
     }
 }
@@ -65,13 +65,13 @@ async function sendEmail (res, email, otp) {
         console.info(SERVICE_FILE_NAME + SERVICE_NAME + "Entering into send email.");
         User.findEmailParams('email', async(err, emailSetup) => {
             if (err) {
-                console.info(SERVICE_FILE_NAME + SERVICE_NAME + "Error retrieving User with id. Error:" + JSON.stringify(err));
-                return APIResponse.errorResponse(res, "Error retrieving User with id " + req.params.userId, "USRE005");
+                console.error(SERVICE_FILE_NAME + SERVICE_NAME + "Error in retrieving User with email. Error:" + JSON.stringify(err));
+                return { "status":"SUCCESS","message": "Error in retrieving User with id ", "statusCode":"USRE005"};
             } else {
                 User.findEmailTemplate('send_otp', async(err, emailTemplate) => {
                     if (err) {
-                        console.info(SERVICE_FILE_NAME + SERVICE_NAME + "Error retrieving User with id. Error:" + JSON.stringify(err));
-                        return APIResponse.errorResponse(res, "Error retrieving User with id " + req.params.userId, "USRE005");
+                        console.error(SERVICE_FILE_NAME + SERVICE_NAME + "Error retrieving User with email. Error:" + JSON.stringify(err));
+                        return APIResponse.errorResponse(res, "Error retrieving User with email " + req.params.userId, "USRE005");
                     } else {
                         emailTemplate.email = email;
                         let emailContent = emailTemplate.email_content;
@@ -87,7 +87,8 @@ async function sendEmail (res, email, otp) {
             }
         });
     } catch (error) {
-        console.info(SERVICE_FILE_NAME + SERVICE_NAME + "Something went wrong.");
-        return APIResponse.errorResponse(res, "Something went wrong.", "USRE011");
+        console.error(error);
+        console.info(SERVICE_FILE_NAME + SERVICE_NAME + "Something went wrong.", error);
+        return { "status":"ERROR","message": "Something went wrong.", "statusCode":"USRE011"};
     }
 }

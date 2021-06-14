@@ -11,4 +11,5 @@ module.exports = {
     PASSWORD: "Anka@1234",
     DB: "node_app",
     HOST: "172.30.167.49"
+    // HOST: "localhost"
 };

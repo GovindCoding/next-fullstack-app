@@ -8,16 +8,16 @@ const SERVICE_FILE_NAME = "Users :: "
 
 export default (req, res) => {
     if(req.method === "POST"){
-        const SERVICE_NAME = "verifyEmail() :: ";
+        const SERVICE_NAME = "VerifyOTP() :: ";
         const reqObj = req.body;
         console.log(JSON.stringify(reqObj))
         try {
-            console.info(SERVICE_FILE_NAME + SERVICE_NAME + "Entering into verify email.");
+            console.info(SERVICE_FILE_NAME + SERVICE_NAME + "Entering into VerifyOTP.");
             User.getUserById(parseInt(reqObj.userId), (err, user) => {
                 if (err) {
                     console.log(JSON.stringify(err));
-                    console.error(SERVICE_FILE_NAME + SERVICE_NAME + "Error retrieving user with email!");
-                    return APIResponse.errorResponse(res, "Error retrieving user with email " + parseInt(reqObj.userId), "USRE005");
+                    console.error(SERVICE_FILE_NAME + SERVICE_NAME + "Error in retrieving user with email.");
+                    return APIResponse.errorResponseWithError(res, "Error in retrieving user with email." + parseInt(reqObj.userId), "OTPE001", err);
                 } else {
                     if (reqObj.otp === user.otp) {
                         user.accountStatus = constants.EMAIL_VERIFIED;
@@ -25,23 +25,23 @@ export default (req, res) => {
                         user.otp = null;
                         User.verifyEmail(parseInt(reqObj.userId), user, (err, data) => {
                             if (err) {
-                                console.error(SERVICE_FILE_NAME + SERVICE_NAME + "Some error occurred while verifying email address!. Error:" + JSON.stringify(err));
-                                return APIResponse.errorResponse(res, "Some error occurred while verifying email address!", "USRE002");
+                                console.error(SERVICE_FILE_NAME + SERVICE_NAME + "Error while verifying email address. Error:" + JSON.stringify(err));
+                                return APIResponse.errorResponseWithError(res, "Error while verifying email address.", "OTPE002", err);
                             } else {
                                 console.info(SERVICE_FILE_NAME + SERVICE_NAME + "Email verified successfully!");
-                                return APIResponse.successResponse(res, "Email verified successfully!", "USRS001");
+                                return APIResponse.successResponse(res, "Email verified successfully!", "OTPS001");
                             }
                         });
                     } else {
-                        console.error(SERVICE_FILE_NAME + SERVICE_NAME + "Otp is not valid!!");
-                        return APIResponse.errorResponse(res, "Otp is not valid!", "USRE003");
+                        console.error(SERVICE_FILE_NAME + SERVICE_NAME + "OTP is not valid!!");
+                        return APIResponse.errorResponse(res, "OTP is not valid!", "OTPE003");
                     }
                 }
             });
         } catch (error) {
-            console.log(error);
-            console.error(SERVICE_FILE_NAME + SERVICE_NAME + "Error in get user by Id.");
-            return APIResponse.errorResponse(res, "Something went wrong.", "USRE003");
+            console.error(error);
+            console.error(SERVICE_FILE_NAME + SERVICE_NAME + "Error in send OTP.");
+            return APIResponse.errorResponseWithError(res, "Error in send OTP.", "OTPE004", error);
         }
     }
 };
