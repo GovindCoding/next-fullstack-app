@@ -1,6 +1,6 @@
 'use strict'
 const sql = require("../config/db");
-const logger = require('../config/logger');
+// const logger = require('../config/logger');
 const SERVICE_FILE_NAME = "user.model :: ";
 
 // constructor
@@ -18,29 +18,29 @@ const User = function(user) {
 
 User.create = (newUser, result) => {
     const SERVICE_NAME = "create() :: ";
-    logger.info(SERVICE_FILE_NAME + SERVICE_NAME + "Entering into create user.");
+    console.info(SERVICE_FILE_NAME + SERVICE_NAME + "Entering into create user.");
     sql.query("INSERT INTO users SET ?", newUser, (err, res) => {
         if (err) {
-            logger.error(SERVICE_FILE_NAME + SERVICE_NAME + "error: ", err);
+            console.error(SERVICE_FILE_NAME + SERVICE_NAME + "error: ", err);
             result(err, null);
             return;
         }
-        logger.info(SERVICE_FILE_NAME + SERVICE_NAME + "created user: ", { id: res.insertId, ...newUser });
+        console.info(SERVICE_FILE_NAME + SERVICE_NAME + "created user: ", { id: res.insertId, ...newUser });
         result(null, { id: res.insertId, ...newUser });
     });
 };
 
 User.getUserById = (userId, result) => {
     const SERVICE_NAME = "getUserById() :: ";
-    logger.info(SERVICE_FILE_NAME + SERVICE_NAME + "Entering into getUserById().");
+    console.info(SERVICE_FILE_NAME + SERVICE_NAME + "Entering into getUserById().");
     sql.query(`SELECT * FROM users WHERE id = ${userId}`, (err, res) => {
         if (err) {
-            logger.error(SERVICE_FILE_NAME + SERVICE_NAME + "error: ", err);
+            console.error(SERVICE_FILE_NAME + SERVICE_NAME + "error: ", err);
             result(err, null);
             return;
         }
         if (res.length) {
-            logger.info(SERVICE_FILE_NAME + SERVICE_NAME + "found user: ", res[0]);
+            console.info(SERVICE_FILE_NAME + SERVICE_NAME + "found user: ", res[0]);
             result(null, res[0]);
             return;
         }
@@ -51,25 +51,25 @@ User.getUserById = (userId, result) => {
 
 // User.getAll = result => {
 //     const SERVICE_NAME = "getAll() :: ";
-//     logger.info(SERVICE_FILE_NAME + SERVICE_NAME + "Entering into getAll.");
+//     console.info(SERVICE_FILE_NAME + SERVICE_NAME + "Entering into getAll.");
 //     sql.query("SELECT * FROM users", (err, res) => {
 //         if (err) {
-//             logger.error(SERVICE_FILE_NAME + SERVICE_NAME + "error: ", err);
+//             console.error(SERVICE_FILE_NAME + SERVICE_NAME + "error: ", err);
 //             result(null, err);
 //             return;
 //         }
-//         logger.info(SERVICE_FILE_NAME + SERVICE_NAME + "users: ", res);
+//         console.info(SERVICE_FILE_NAME + SERVICE_NAME + "users: ", res);
 //         result(null, res);
 //     });
 // };
 
 // User.updateById = (id, user, result) => {
 //     const SERVICE_NAME = "updateById() :: ";
-//     logger.info(SERVICE_FILE_NAME + SERVICE_NAME + "Entering into updateById.");
+//     console.info(SERVICE_FILE_NAME + SERVICE_NAME + "Entering into updateById.");
 //     sql.query(
 //         "UPDATE users SET first_name = ?, last_name = ?, WHERE id = ?", [user.firstName, user.lastName, id], (err, res) => {
 //             if (err) {
-//                 logger.error(SERVICE_FILE_NAME + SERVICE_NAME + "error: ", err);
+//                 console.error(SERVICE_FILE_NAME + SERVICE_NAME + "error: ", err);
 //                 result(null, err);
 //                 return;
 //             }
@@ -78,7 +78,7 @@ User.getUserById = (userId, result) => {
 //                 result({ kind: "not_found" }, null);
 //                 return;
 //             }
-//             logger.info(SERVICE_FILE_NAME + SERVICE_NAME + "User updated successfully. : ", { id: id, ...user });
+//             console.info(SERVICE_FILE_NAME + SERVICE_NAME + "User updated successfully. : ", { id: id, ...user });
 //             result(null, { id: id, ...user });
 //         }
 //     );
@@ -86,15 +86,15 @@ User.getUserById = (userId, result) => {
 
 User.findEmailParams = (type, result) => {
     const SERVICE_NAME = "findEmailParams() :: ";
-    logger.info(SERVICE_FILE_NAME + SERVICE_NAME + "Entering into findEmailParams.");
+    console.info(SERVICE_FILE_NAME + SERVICE_NAME + "Entering into findEmailParams.");
     sql.query(`SELECT * FROM params WHERE param_type = '${type}'`, (err, res) => {
         if (err) {
-            logger.error(SERVICE_FILE_NAME + SERVICE_NAME + "error: ", err);
+            console.error(SERVICE_FILE_NAME + SERVICE_NAME + "error: ", err);
             result(err, null);
             return;
         }
         if (res.length) {
-            logger.info(SERVICE_FILE_NAME + SERVICE_NAME + "found email params: ", res[0]);
+            console.info(SERVICE_FILE_NAME + SERVICE_NAME + "found email params: ", res[0]);
             result(null, res[0]);
             return;
         }
@@ -105,15 +105,15 @@ User.findEmailParams = (type, result) => {
 
 User.findEmailTemplate = (name, result) => {
     const SERVICE_NAME = "findEmailTemplate() :: ";
-    logger.info(SERVICE_FILE_NAME + SERVICE_NAME + "Entering into findEmailTemplate.");
+    console.info(SERVICE_FILE_NAME + SERVICE_NAME + "Entering into findEmailTemplate.");
     sql.query(`SELECT * FROM email_templates WHERE name = '${name}'`, (err, res) => {
         if (err) {
-            logger.error(SERVICE_FILE_NAME + SERVICE_NAME + "error: ", err);
+            console.error(SERVICE_FILE_NAME + SERVICE_NAME + "error: ", err);
             result(err, null);
             return;
         }
         if (res.length) {
-            logger.info(SERVICE_FILE_NAME + SERVICE_NAME + "found email template: ", res[0]);
+            console.info(SERVICE_FILE_NAME + SERVICE_NAME + "found email template: ", res[0]);
             result(null, res[0]);
             return;
         }
@@ -124,10 +124,10 @@ User.findEmailTemplate = (name, result) => {
 
 User.verifyEmail = (id, user, result) => {
     const SERVICE_NAME = "verifyEmail() :: ";
-    logger.info(SERVICE_FILE_NAME + SERVICE_NAME + "Entering into verifyEmail.");
+    console.info(SERVICE_FILE_NAME + SERVICE_NAME + "Entering into verifyEmail.");
     sql.query(`UPDATE users SET otp = ?, account_status = ? WHERE id =?`, [user.otp, user.accountStatus, id], (err, res) => {
         if (err) {
-            logger.error(SERVICE_FILE_NAME + SERVICE_NAME + "error: ", err);
+            console.error(SERVICE_FILE_NAME + SERVICE_NAME + "error: ", err);
             result(err, null);
             return;
         }
@@ -135,7 +135,7 @@ User.verifyEmail = (id, user, result) => {
             result({ kind: "not_found" }, null);
             return;
         }
-        logger.info(SERVICE_FILE_NAME + SERVICE_NAME + "OTP verified successfully: ", { id: id, ...user });
+        console.info(SERVICE_FILE_NAME + SERVICE_NAME + "OTP verified successfully: ", { id: id, ...user });
         result(null, { id: id, ...user });
     });
 };
@@ -143,15 +143,15 @@ User.verifyEmail = (id, user, result) => {
 
 User.login = (user, result) => {
     const SERVICE_NAME = "login() :: ";
-    logger.info(SERVICE_FILE_NAME + SERVICE_NAME + "Entering into login().");
+    console.info(SERVICE_FILE_NAME + SERVICE_NAME + "Entering into login().");
     sql.query(`SELECT * FROM users WHERE email = '${user.email}' AND password = '${user.password}'`, (err, res) => {
         if (err) {
-            logger.error(SERVICE_FILE_NAME + SERVICE_NAME + "error: ", err);
+            console.error(SERVICE_FILE_NAME + SERVICE_NAME + "error: ", err);
             result(err, null);
             return;
         }
         if (res.length) {
-            logger.info(SERVICE_FILE_NAME + SERVICE_NAME + "found user: ", res[0]);
+            console.info(SERVICE_FILE_NAME + SERVICE_NAME + "found user: ", res[0]);
             result(null, new User(res[0]));
             return;
         }
