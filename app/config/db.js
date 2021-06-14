@@ -9,13 +9,13 @@ var connection = mysql.createConnection({
     database: dbConfig.DB,
 });
 
-// var connection = mysql.createConnection({
-//     host     : process.env.OPENSHIFT_MYSQL_DB_HOST,
-//     port     : process.env.OPENSHIFT_MYSQL_DB_PORT,
-//     user     : 'db_user',
-//     password : 'Anka@1234',
-//     database : 'node_app'
-//     });
+var connection = mysql.createConnection({
+    host     : process.env.OPENSHIFT_MYSQL_DB_HOST,
+    port     : process.env.OPENSHIFT_MYSQL_DB_PORT,
+    user     : 'db_user',
+    password : 'Anka@1234',
+    database : 'node_app'
+    });
 
 connection.connect(function(err) {
     if (err) {
