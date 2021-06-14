@@ -9,13 +9,16 @@ const dbConfig = require("./db.config.js");
 //     database: dbConfig.DB,
 // });
 
-var connection = mysql.createConnection({
-    host     : "172.30.167.49",
-    port     : process.env.OPENSHIFT_MYSQL_DB_PORT,
-    user     : 'db_user',
-    password : 'Anka@1234',
-    database : 'node_app'
-    });
+// var connection = mysql.createConnection({
+//     host     : "172.30.167.49",
+//     port     : process.env.OPENSHIFT_MYSQL_DB_PORT,
+//     user     : 'db_user',
+//     password : 'Anka@1234',
+//     database : 'node_app'
+// });
+
+var connection = mysql.createConnection(process.env.OPENSHIFT_MYSQL_DB_URL + 'node_app');
+
 
 connection.connect(function(err) {
     if (err) {
