@@ -12,7 +12,7 @@ const dbConfig = require("./db.config.js");
 var connection = mysql.createConnection({
     host     : "172.30.167.49",
     port     : process.env.OPENSHIFT_MYSQL_DB_PORT,
-    user     : 'root',
+    user     : 'db_user',
     password : 'Anka@1234',
     database : 'node_app'
 });
